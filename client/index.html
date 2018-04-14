@@ -18,8 +18,8 @@
   <canvas id="ctx" width="500" height="500" style="border: 1px solid"></canvas>
 </div>
 <div id="divSignIn">
-  <input id="pseudo" type="text">
-  <input id="password" type="text">
+  <label for="pseudo">Login :<input id="pseudo" type="text"></label>
+  <label for="password">Mot de passe : <input id="password" type="password"></label>
   <button onclick="happy()">envoyer</button>
 </div>
 <div id="chat-text" class="hide">
@@ -27,12 +27,13 @@
 </div>
 <form id="chat-form" class="hide">
     <input type="text" id="chat-input" style="width:500px">
+    <input type="submit" value="envoyer">
 </form>
 <script src="socket.io/socket.io.js"></script>
 <script>
-    var socket = io();
-    var username = document.getElementById('pseudo').value;
-    var password = document.getElementById('password').value;
+    var socket = io.connect();
+    var username = document.getElementById('pseudo');
+    var password = document.getElementById('password');
     var ctx = document.getElementById('ctx').getContext("2d");
     var divGame = document.getElementById('divGame');
     ctx.font = "30px Courier New";
@@ -41,17 +42,21 @@
     var chatForm = document.getElementById('chat-form');
     var titre = document.getElementById('titre');
     var happy = function() {
-      socket.emit('signIn', {'user' : username, 'password' : password});
+      socket.emit('signIn', {user: username.value, password: password.value});
     };
-    socket.on('signInResponse', function (data) {
-          divGame.classList.remove('hide');
-          chatText.classList.remove('hide');
-          chatForm.classList.remove('hide');
-          divSignIn.classList.add('hide');
-          titre.innerHTML = data.msg;
+    socket.on('signInResponse', function(data) {
+          if(data.success){
+            divGame.classList.remove('hide');
+            chatText.classList.remove('hide');
+            chatForm.classList.remove('hide');
+            divSignIn.classList.add('hide');
+            titre.innerHTML = "Welcome to my simple hosted game!";
+          } else {
+            console.log(data);
+          }
         });
 
-    socket.on('newPositions', function (data) {
+    socket.on('newPositions', function(data) {
 
         ctx.clearRect(0,0,500,500);
 
@@ -62,7 +67,7 @@
 
         });
     socket.on('addToChat', function(data){
-        chatText.innerHTML = "<div>" + data + "</div>"
+        chatText.innerHTML = "<div>" + data + "</div>";
     });
     socket.on('evalAnswer', function(data){
         console.log(data);
