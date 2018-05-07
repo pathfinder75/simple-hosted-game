@@ -1,0 +1,13 @@
+include includes/header.pug
+link(href='client/public/style.css')
+body
+#signDiv
+  p Warning : #{error}
+  form(method='post')
+    | Username:
+    input#signDiv-username(type='text' name='username')
+    |     Password:
+    input#signDiv-password(type='password')
+    input#signDiv-signIn(type='submit')
+
+include includes/footer

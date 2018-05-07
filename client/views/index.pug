@@ -1,0 +1,13 @@
+include includes/header
+link(href="client/public/style.css")
+body
+.header-title
+  h1 Welcome to my Game
+.container(style='')
+  .header
+    p Welcome #{username} ! Last login on #{date}
+  .game-div
+    include ../game-div.html
+  aside
+    include includes/player-list.pug
+  .chat-log

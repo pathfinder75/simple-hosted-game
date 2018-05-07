@@ -1,0 +1,108 @@
+body {
+  background: rgba(79, 5, 235, 1);
+  font-family: 'Open sans', Arial, sans-serif;
+}
+canvas {
+  background-image: repeating-linear-gradient(rgba(255,255,255,0.1), #FB1, #CF0, #FF1, #FB1, #C00);
+  border: transparent;
+  margin: 0 15px;
+}
+.container {
+  transform: translateX(25%);
+  width: auto;
+}
+.header-title {
+  background: rgb(255,180,1);
+  padding: 1.6rem;
+  width: 100%;
+  border: 5px inset #29065b;
+}
+.header-title h1 {
+  color: rgb(0, 0, 0);
+  font-family: 'Roboto', 'Open sans', sans-serif;
+  text-shadow: 1px 1px #000;
+  text-decoration: underline;
+
+}
+.game-div {
+  background: linear-gradient(hsl(265, 77%, 48%), #FFF, hsl(265, 77%, 48%), #6b1cd9);
+}
+.player-list:hover, .header-title:hover {
+  opacity: 1;
+  box-shadow: 2px 2px 2px white;
+}
+.header {
+  padding: 0 15px;
+  color: #29065b;
+  font-family: 'Open sans';
+  font-weight: bolder;
+  text-shadow: 1px 1px 1px;
+  text-decoration: underline;
+  display: block;
+  width: 55%;
+}
+.header:hover{
+  color: white;
+  font-weight: normal;
+}
+.player-list {
+  width: 16VW;
+  height: 10vh;
+  padding: 5px;
+  margin-left: 2vw;
+  border-bottom: 10px solid #cb9100;
+  background: rgb(255, 255, 0);
+  color: #6b1cd9;
+  overflow: hidden;
+  font-family: verdana;
+  text-shadow: -1px -1px;
+  opacity: 0.2;
+}
+.player-list ul {
+  display: inline;
+  margin: 0;
+  padding: 0 10px;
+
+}
+.player-list ul li {
+  text-align: left;
+  list-style-type: none;
+
+}
+
+.game-div{
+  float: left;
+  border: 3px rgb(183, 91, 255);
+}
+.chat-block {
+  border: 2px rgb(255,255,255);
+  border-style: outset;
+  overflow: hidden;
+}
+#chat-text, #chat-input{
+  padding: 10px;
+  width: 100%;
+}
+#chat-text {
+  font-family: monospace;
+  color: rgb(28, 255, 0);
+}
+.chat-block {
+  background: #000;
+  display: block;
+  border: 2px inset rgb(125,125,125);
+}
+.chat-text:hover {
+  text-shadow: 5px 5px 5px white;
+}
+#overlay {
+  background: rgba(0, 0, 0, 0);
+  border-bottom: 10px solid #cb9100;
+}
+div#rule {
+  height: 78vh;
+  width: 16vw;
+  background-color: rgba(79, 5, 235, 1);
+  float: left;
+
+}
