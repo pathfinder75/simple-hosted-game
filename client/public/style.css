@@ -1,67 +1,86 @@
+@font-face {
+  font-family: 'ITC Baskerville';
+  src:url(./NewBaskervilleStd-Italic.otf);
+}
+
 body {
-  background: rgba(79, 5, 235, 1);
+  background: #EFEFEF;
   font-family: 'Open sans', Arial, sans-serif;
 }
-canvas {
-  background-image: repeating-linear-gradient(rgba(255,255,255,0.1), #FB1, #CF0, #FF1, #FB1, #C00);
-  border: transparent;
-  margin: 0 15px;
-}
-.container {
-  transform: translateX(25%);
+aside {
+  padding-left: 10vw;
   width: auto;
+  margin: 0;
+}
+
+@media screen and (min-width: 1024px) {
+
+#signDiv {
+  width: 100%;
+  min-height: 600px;
+  margin: 0 auto;
+}
+#signDiv-signIn {
+  background: transparent;
+  margin-left: 15px;
+}
+#signDiv-signIn:hover {
+  background: #FB1;
+}
+.warning {
+  color: orange;
+}
+
+.container {
+  max-height: 800px;
 }
 .header-title {
-  background: rgb(255,180,1);
+  background: rgba(255, 180, 1, 0.55);
   padding: 1.6rem;
-  width: 100%;
   border: 5px inset #29065b;
+  margin: 0;
 }
 .header-title h1 {
   color: rgb(0, 0, 0);
-  font-family: 'Roboto', 'Open sans', sans-serif;
+  font-family: Verdana, 'Open sans', sans-serif;
   text-shadow: 1px 1px #000;
-  text-decoration: underline;
+  font-weight: bold;
 
 }
-.game-div {
-  background: linear-gradient(hsl(265, 77%, 48%), #FFF, hsl(265, 77%, 48%), #6b1cd9);
-}
-.player-list:hover, .header-title:hover {
-  opacity: 1;
-  box-shadow: 2px 2px 2px white;
+.player-list:hover {
+    opacity: 1;
 }
 .header {
   padding: 0 15px;
+  margin: 30px 0 0 0;
+  margin-bottom: 10vh;
   color: #29065b;
-  font-family: 'Open sans';
+  font-family: 'ITC Baskerville';
   font-weight: bolder;
-  text-shadow: 1px 1px 1px;
-  text-decoration: underline;
-  display: block;
-  width: 55%;
-}
-.header:hover{
-  color: white;
-  font-weight: normal;
+  font-size: 32px;
+  display: inline-block;
+  width: auto;
+  color: #FFF;
+  border-bottom: 1px solid #FFF;
 }
 .player-list {
-  width: 16VW;
-  height: 10vh;
-  padding: 5px;
-  margin-left: 2vw;
+  width: auto;
+  padding: 10px;
   border-bottom: 10px solid #cb9100;
-  background: rgb(255, 255, 0);
+  background: #FB1;
   color: #6b1cd9;
   overflow: hidden;
-  font-family: verdana;
+  font-family: Verdana;
   text-shadow: -1px -1px;
   opacity: 0.2;
+}
+.player-div {
+
 }
 .player-list ul {
   display: inline;
   margin: 0;
-  padding: 0 10px;
+  padding: 0 5px;
 
 }
 .player-list ul li {
@@ -69,40 +88,345 @@ canvas {
   list-style-type: none;
 
 }
-
 .game-div{
+  background: -webkit-linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
+  background: -moz-linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
+  background: -o-linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
+  background: linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
+
+  margin: 0 15px;
+  border: 5px inset #000;
   float: left;
-  border: 3px rgb(183, 91, 255);
 }
 .chat-block {
-  border: 2px rgb(255,255,255);
-  border-style: outset;
+  width: 100%;
   overflow: hidden;
 }
 #chat-text, #chat-input{
-  padding: 10px;
-  width: 100%;
-}
-#chat-text {
   font-family: monospace;
   color: rgb(28, 255, 0);
+  padding: 10px;
+  width: 100%;
+  border: none;
 }
-.chat-block {
+#chat-text {
+  background-color: transparent;
+  height: 20vh;
+}
+.chat-block, #chat-text, #chat-input {
   background: #000;
   display: block;
-  border: 2px inset rgb(125,125,125);
+}
+#chat-form {
+  border-top: 1px solid white;
 }
 .chat-text:hover {
   text-shadow: 5px 5px 5px white;
 }
 #overlay {
-  background: rgba(0, 0, 0, 0);
-  border-bottom: 10px solid #cb9100;
+  position: absolute;
+  opacity: 0;
+  background-color: #FFF;
+  border-radius: 15px;
+  width: 100px;
+  height: 100px;
+  z-index: 2000;
 }
-div#rule {
-  height: 78vh;
-  width: 16vw;
-  background-color: rgba(79, 5, 235, 1);
+div.rule {
+  height: 95vh;
+  background-color: rgba(0, 0, 0, 0.1);
   float: left;
+  border: 5px solid #000;
 
+}
+.footer {
+  float: left;
+  bottom: 0;
+  margin-top: 30px;
+  padding-left: 10px;
+  width: 100%;
+  bottom: 0;
+  color: white;
+  font-family: 'Oswald', sans-serif;
+  border-top: 1px solid #FFF;
+}
+
+#play1 {
+  float: left;
+}
+#play2 {
+  float: right;
+}
+
+}
+@media screen and (max-width: 1024px) {
+
+#signDiv {
+  width: 100%;
+  margin: 0 auto;
+}
+#signDiv-signIn {
+  background: transparent;
+  margin-left: 15px;
+}
+#signDiv-signIn:hover {
+  background: #FB1;
+}
+.warning {
+  color: orange;
+}
+
+.container {
+  max-height: 800px;
+}
+.header-title {
+  background: rgba(255, 180, 1, 0.55);
+  padding: 1.6rem;
+  border: 5px inset #29065b;
+  margin: 0;
+}
+.header-title h1 {
+  color: rgb(0, 0, 0);
+  font-family: Verdana, 'Open sans', sans-serif;
+  text-shadow: 1px 1px #000;
+  font-weight: bold;
+
+}
+.player-list:hover {
+    opacity: 1;
+}
+.header {
+  padding: 0 15px;
+  margin: 30px 0 0 0;
+  margin-bottom: 10vh;
+  color: #29065b;
+  font-family: 'ITC Baskerville';
+  font-weight: bolder;
+  font-size: 32px;
+  display: inline-block;
+  width: auto;
+  color: #FFF;
+  border-bottom: 1px solid #FFF;
+}
+.player-list {
+  width: auto;
+  padding: 10px;
+  border-bottom: 10px solid #cb9100;
+  background: #FB1;
+  color: #6b1cd9;
+  overflow: hidden;
+  font-family: Verdana;
+  text-shadow: -1px -1px;
+  opacity: 0.2;
+}
+.player-div {
+  margin: 30px 15px;
+}
+.player-list ul {
+  display: inline;
+  margin: 0;
+  padding: 0 5px;
+
+}
+.player-list ul li {
+  text-align: left;
+  list-style-type: none;
+
+}
+.game-div{
+  background: -webkit-linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
+  background: -moz-linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
+  background: -o-linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
+  background: linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
+  margin: 0 15px;
+  border: 5px inset #000;
+}
+.chat-block {
+  width: 100%;
+  overflow: hidden;
+}
+#chat-text, #chat-input{
+  padding: 10px;
+  width: 100%;
+  border: none;
+}
+#chat-text {
+  font-family: monospace;
+  color: rgb(28, 255, 0);
+  height: 20vh;
+}
+.chat-block {
+  background: #000;
+  display: block;
+}
+.chat-text:hover {
+  text-shadow: 5px 5px 5px white;
+}
+#overlay {
+  position: absolute;
+  opacity: 0;
+  background-color: #FFF;
+  border-radius: 15px;
+  width: 100px;
+  height: 100px;
+  z-index: 2000;
+}
+div.rule {
+  height: 95vh;
+  background-color: rgba(0, 0, 0, 0.1);
+  float: left;
+  border: 5px solid #000;
+
+}
+.footer {
+  display: block;
+  float: left;
+  padding-left: 10px;
+  width: 100%;
+  color: white;
+  font-family: 'Oswald', sans-serif;
+  border-top: 1px solid #FFF;
+}
+
+#play1 {
+  float: left;
+}
+#play2 {
+  float: right;
+}
+}
+@media handled, screen and (max-width:480px) {
+  #signDiv {
+    width: 100%;
+    margin: 0 auto;
+  }
+  #signDiv-signIn {
+    background: transparent;
+    margin-left: 15px;
+  }
+  #signDiv-signIn:hover {
+    background: #FB1;
+  }
+  .warning {
+    color: orange;
+  }
+
+  .container {
+    max-height: 100%;
+  }
+  .header-title {
+    background: rgba(255, 180, 1, 0.55);
+    padding: 1.6rem;
+    border: 5px inset #29065b;
+    margin: 0;
+  }
+  .header-title h1 {
+    color: rgb(0, 0, 0);
+    font-family: Verdana, 'Open sans', sans-serif;
+    text-shadow: 1px 1px #000;
+    font-weight: bold;
+
+  }
+  .player-list:hover {
+      opacity: 1;
+  }
+  .header {
+    padding: 0 15px;
+    margin: 30px 0 0 0;
+    margin-bottom: 10vh;
+    color: #29065b;
+    font-family: 'ITC Baskerville';
+    font-weight: bolder;
+    font-size: 32px;
+    display: inline-block;
+    width: auto;
+    color: #FFF;
+    border-bottom: 1px solid #FFF;
+  }
+  .player-list {
+    width: auto;
+    padding: 10px;
+    border-bottom: 10px solid #cb9100;
+    background: #FB1;
+    color: #6b1cd9;
+    overflow: hidden;
+    font-family: Verdana;
+    text-shadow: -1px -1px;
+    opacity: 0.2;
+  }
+  .player-div {
+    width: 100%;
+    padding: 0 5px;
+  }
+  .player-list ul {
+    display: inline;
+    margin: 0;
+    padding: 0 5px;
+
+  }
+  .player-list ul li {
+    text-align: left;
+    list-style-type: none;
+
+  }
+  .game-div{
+    background: -webkit-linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
+    background: -moz-linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
+    background: -o-linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
+    background: linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
+    margin: 0 15px;
+    border: 5px inset #000;
+    width: 100%;
+  }
+  .chat-block {
+    width: 100%;
+    overflow: hidden;
+  }
+  #chat-text, #chat-input{
+    padding: 10px;
+    width: 100%;
+    border: none;
+  }
+  #chat-text {
+    font-family: monospace;
+    color: rgb(28, 255, 0);
+    height: 20vh;
+  }
+  .chat-block {
+    background: #000;
+    display: block;
+  }
+  .chat-text:hover {
+    text-shadow: 5px 5px 5px white;
+  }
+  #overlay {
+    position: absolute;
+    opacity: 0;
+    background-color: #FFF;
+    border-radius: 15px;
+    width: 100px;
+    height: 100px;
+    z-index: 2000;
+  }
+  div.rule {
+    height: 95vh;
+    background-color: rgba(0, 0, 0, 0.1);
+    float: left;
+    border: 5px solid #000;
+  }
+  .footer {
+    padding-left: 10px;
+    width: 100%;
+    bottom: 0;
+    color: white;
+    font-family: 'Oswald', sans-serif;
+    border-top: 1px solid #FFF;
+  }
+
+  #play1 {
+    float: left;
+  }
+  #play2 {
+    float: right;
+  }
 }

@@ -1,0 +1,127 @@
+@font-face {
+  font-family: 'ITC Baskerville';
+  src:url(./NewBaskervilleStd-Italic.otf);
+}
+
+body {
+  background: rgba(79, 5, 235, 1);
+  font-family: 'Open sans', Arial, sans-serif;
+}
+canvas {
+  width: 500px;
+  height: 500px;
+}
+aside {
+  padding-left: 10vw;
+  width: auto;
+  margin: 0;
+}
+.container {
+  height: 100%;
+}
+.header-title {
+  background: rgba(255, 180, 1, 0.55);
+  padding: 1.6rem;
+  border: 5px inset #29065b;
+  margin: 0;
+}
+.header-title h1 {
+  color: rgb(0, 0, 0);
+  font-family: Verdana, 'Open sans', sans-serif;
+  text-shadow: 1px 1px #000;
+  font-weight: bold;
+
+}
+.player-list:hover {
+    opacity: 1;
+}
+.header {
+  padding: 0 15px;
+  margin: 30px 0 0 0;
+  margin-bottom: 10vh;
+  color: #29065b;
+  font-family: 'ITC Baskerville';
+  font-weight: bolder;
+  font-size: 32px;
+  display: inline-block;
+  width: auto;
+  color: #FFF;
+  border-bottom: 1px solid #FFF;
+}
+.player-list {
+  width: auto;
+  height: 25vh;
+  padding: 10px;
+  border-bottom: 10px solid #cb9100;
+  background: #FB1;
+  color: #6b1cd9;
+  overflow: hidden;
+  font-family: Verdana;
+  text-shadow: -1px -1px;
+  opacity: 0.2;
+}
+.player-div {
+  float:left;
+}
+.player-list ul {
+  display: inline;
+  margin: 0;
+  padding: 0 5px;
+
+}
+.player-list ul li {
+  text-align: left;
+  list-style-type: none;
+
+}
+.game-div{
+  background: linear-gradient(hsl(265, 77%, 48%), #FFF, hsl(265, 77%, 48%), #6b1cd9);
+  margin: 0 15px;
+  border: 5px inset #000;
+}
+.chat-block {
+  overflow: hidden;
+}
+#chat-text, #chat-input{
+  padding: 10px;
+  width: 100%;
+  border: none;
+}
+#chat-text {
+  font-family: monospace;
+  color: rgb(28, 255, 0);
+  height: 20vh;
+}
+.chat-block {
+  background: #000;
+  display: block;
+}
+.chat-text:hover {
+  text-shadow: 5px 5px 5px white;
+}
+#overlay {
+  z-index: 2000;
+  position: absolute;
+  opacity: 0.3;
+  border-radius: 15px;
+  width: 500px;
+  height: 500px;
+}
+div.rule {
+  height: 100vh;
+  width: 20vw;
+  background-color: rgba(0, 0, 0, 0.1);
+  float: left;
+  border: 5px solid #000;
+
+}
+.footer {
+  padding-left: 10px;
+  float: left;
+  width: 100%;
+  display: inline;
+  bottom: 0;
+  color: white;
+  font-family: 'Oswald', sans-serif;
+  border-top: 1px solid #FFF;
+}

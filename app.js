@@ -2,9 +2,6 @@
 var mongojs = require('mongojs');
 var db = mongojs('localhost:27017/myGame', ['account', 'progress']);
 
-// db.account.insert({username:"b", password:"b"});
-
-// var db = null;
 const express = require('express');
 const path = require('path');
 var app = express();
@@ -14,41 +11,43 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var serv = require('http').Server(app);
 var pug = require('pug');
-/* configuration */
+
+  // Configuration
 app.use('/client/public',express.static(__dirname + '/client/public'));
 app.set('view engine','pug');
 app.set('views', __dirname + '/client/views');
-  // Allow parsing cookies from request headers
+
 app.use(cookieParser());
+
   // Session management
 app.use(session({
-    // Private crypting key
+
     secret:'123456789SECRET',
     saveUninitialized : false,
     resave: false,
-    // Internal session data storage engine, this is the default engine embedded with connect.
-    // Much more can be found as external modules (Redis, Mongo, Mysql, file...). look at "npm search connect session store"
+
+
 }));
-// Allow parsing form data
+
 app.use(bodyParser());
 function requireLogin(req, res, next) {
+  // recupère l'identifiant de session
   if (req.session.username) {
-    // si l'utilisateur est loggé on le renvoit vers l'index
+
     next();
   } else {
-    // autrement il est redirigé vers login
+  // else redirige vers la page login
   res.redirect('/login');
   }
 }
 app.get('/', [requireLogin], function (req, res, next) {
-  // res.sendFile(__dirname + '/client/index.html');
-  res.render('index', {"username": req.session.username});
+
+  var date = new Date();
+  res.render('index', {"username": req.session.username, "date": date.toLocaleString()});
 });
-// app.get('/',function(req, res) {
-//     res.sendFile(__dirname + '/client/index.html');
-// });
+
 app.get("/login", function (req, res) {
-  // Show form, default value = current username
+
   res.render("login", { "username": req.session.username, "error": "null" });
 });
 app.post("/login", function (req, res) {
@@ -58,21 +57,22 @@ app.post("/login", function (req, res) {
     console.log(options.error);
     res.render("login", options);
   } else if (req.body.username == req.session.username) {
-    // User has not changed username, accept it as-is
+
     res.redirect("/");
   } else if (!req.body.username.match(/^\w{3,}$/)) {
     options.error = "User name must have at least 3 alphanumeric characters";
     res.render("login", options);
   } else {
-      // if username is taken :
+      // if username is taken : choose another user name
       db.account.find({ username: req.body.username}, function(err, data) {
           if (data.length > 0) {
-              // true
+
               options.error = "User name is already taken";
               res.render("login", options);
           } else {
-              // false
+
               req.session.username = req.body.username;
+              db.account.insert({username: req.session.username, password: req.body.password})
               res.redirect("/");
           }
       });
@@ -108,7 +108,7 @@ var Entity = function() {
 var Player = function(id) {
     var self = Entity();
     self.id = id;
-    self.number = "" + Math.floor(10 * Math.random());
+    self.letter = getUniqueLetter();
     self.pressingRight=false;
     self.pressingLeft=false;
     self.pressingUp=false;
@@ -160,7 +160,7 @@ var Player = function(id) {
         id: self.id,
         x: self.x,
         y: self.y,
-        number: self.number,
+        letter: self.letter,
         hp: self.hp,
         maxHp: self.maxHp,
         score: self.score,
@@ -211,6 +211,15 @@ Player.getAllInitPack = function() {
   return players;
 }
 Player.onDisconnect = function (socket) {
+  var playerID = Player.list[socket.id].id;
+  var score = Player.list[socket.id].score;
+  db.progress.find({letter: playerID}, function(err, data) {
+      if (data.length > 0) {
+        db.progress.insert({userID: playerID, score: score});
+      } else {
+        db.progress.insert({userID: playerID, score: score});
+      }
+  });
     delete Player.list[socket.id];
     removePack.player.push(socket.id);
 }
@@ -242,7 +251,7 @@ var Bullet = function(parent, angle) {
           if(self.getDistance(p) < 25 && self.parent !== p.id){
             // handle collision
             p.hp -= 1;
-            // if player 2 hp is lower than zero add 1 to player 1
+            // if player2 hp <= O player1 score +1
             if(p.hp <= 0){
               var shooter = Player.list[self.parent];
                 shooter.score += 1;
@@ -303,12 +312,9 @@ Bullet.getAllInitPack = function() {
 
 var DEBUG = true;
 
-// var USERS = {
-//     //username:password
-//     "bob":"asd",
-//     "bob2":"bob",
-//     "bob3":"ttt",
-// }
+var getUniqueLetter = function() {
+    return String.fromCharCode(Math.floor(Math.random() * (90 - 65) + 65));
+}
 var isValidPassword = function (data, cb) {
     db.account.find({username:data.username, password:data.password}, function(err, res){
         if(res.length > 0){
@@ -353,8 +359,10 @@ var DEBUG = true;
   });
 
     socket.on('disconnect', function(){
+
         delete SOCKET_LIST[socket.id];
         Player.onDisconnect(socket);
+
     });
 
     socket.on('evalServer', function (data) {

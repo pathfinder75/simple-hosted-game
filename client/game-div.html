@@ -1,16 +1,15 @@
 
-<div id="gameDiv" style="">
-    <canvas id="ctx" width="500" height="500" style="">
+<div id="gameDiv">
+    <div id="overlay"></div>
+    <canvas id="ctx" width="500" height="500">
 
       <p>Veuillez mettre à jour votre navigateur.</p>
     </canvas>
 
     <div class="chat-block">
-      <!-- <legend>chat form</legend> -->
-    <div id="chat-text" style="width: 500px;height:100px;overflow-y:scroll">
-        <div id="">
-        <div>hello {{username}}!</div>
-        </div>
+
+    <div id="chat-text" style="">
+        <div>hello ! chat here_</div>
     </div>
       <form id="chat-form">
         <input type="text" id="chat-input" style="" placeholder="Entrer votre message ici.">
@@ -35,11 +34,14 @@ var chatForm = document.getElementById('chat-form')
 
 // Game
 var ctx = document.getElementById('ctx').getContext("2d");
-ctx.font = '30px Verdana';
+ctx.font = '1.5em ITC Baskerville';
+var gameDiv = document.getElementById('ctx');
+gameDiv.style.width = window.innerWidth;
+gameDiv.style.height = window.innerHeight;
 
 var Player = function(initPack){
     this.id = initPack.id;
-    this.number = initPack.number;
+    this.letter = initPack.letter;
     this.x = initPack.x;
     this.y = initPack.y;
     this.hp = initPack.hp;
@@ -51,7 +53,7 @@ var Player = function(initPack){
       var hpWidth = 30 * self.hp / self.maxHp;
       ctx.fillRect(self.x - hpWidth/2, self.y - 40, hpWidth, 4);
       // draw user avatar
-      ctx.fillText(self.number, self.x, self.y);
+      ctx.fillText(self.letter, self.x, self.y);
 
       // draw score
       ctx.fillText(self.score, self.x, self.y-60);
@@ -189,5 +191,20 @@ setInterval(function() {
         var angle = Math.atan2(y,x) / Math.PI * 180;
         socket.emit('keyPress', { inputId: 'mouseAngle', state: angle });
         }
-
+    window.addEventListener('resize', resizeGame, false);
+    function resizeGame() {
+      var gameDiv = document.getElementById('ctx');
+      var widthToHeight = 1;
+      var newWidth = window.innerWidth;
+      var newHeight = window.innerHeight;
+      var newWidthToHeight = newWidth / newHeight;
+      if(newWidthToHeight > widthToHeight){
+        newWidth = widthToHeight * newHeight;
+      } else {
+        newHeight = newWidthToHeight * newWidth;
+      }
+      gameDiv.style.width = newWidth + 'px';
+      gameDiv.style.height = newHeight + 'px';
+    }
+    resizeGame();
 </script>

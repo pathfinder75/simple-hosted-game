@@ -2,12 +2,14 @@ include includes/header
 link(href="client/public/style.css")
 body
 .header-title
-  h1 Welcome to my Game
-.container(style='')
+  h1 Welcome to my Game#1
+.container
   .header
-    p Welcome #{username} ! Last login on #{date}
-  .game-div
-    include ../game-div.html
-  aside
-    include includes/player-list.pug
-  .chat-log
+    p Bienvenue #{username} ! Dernière connexion le #{date}
+  .container
+    .game-div
+      include ../game-div.html
+    .player-div
+      include includes/player-list
+    .footer
+      include includes/footer
