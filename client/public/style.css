@@ -13,6 +13,10 @@ aside {
   margin: 0;
 }
 
+canvas {
+  background: transparent;
+}
+
 @media screen and (min-width: 1024px) {
 
 #signDiv {
@@ -37,45 +41,75 @@ aside {
 .header-title {
   background: rgba(255, 180, 1, 0.55);
   padding: 1.6rem;
-  border: 5px inset #29065b;
+  border: 5px solid #29065b;
   margin: 0;
+  box-shadow: 2px 2px 2px;
+}
+.header-title:hover{
+  box-shadow: 2px 2px 2px #FFF;
 }
 .header-title h1 {
-  color: rgb(0, 0, 0);
-  font-family: Verdana, 'Open sans', sans-serif;
-  text-shadow: 1px 1px #000;
-  font-weight: bold;
-
+  color: #29065b;
+  padding: 15px;
+  background-color: rgba(255,255,255,0.3);
+  font-family: 'Acme', Verdana, sans-serif;
+  letter-spacing: 3px;
+  font-weight: 600;
+  display: block;
+}
+.header-title h1:hover{
+  box-shadow: 2px 2px 2px #FFF;
+  text-shadow: -2px -2px 2px #FFF;
 }
 .player-list:hover {
     opacity: 1;
 }
 .header {
+  background-color: rgb(181, 255, 0);
   padding: 0 15px;
   margin: 30px 0 0 0;
   margin-bottom: 10vh;
   color: #29065b;
-  font-family: 'ITC Baskerville';
+  font-family: 'Acme', 'Open Sans', sans-serif;
   font-weight: bolder;
-  font-size: 32px;
+  font-size: 22px;
+  letter-spacing: -1px;
   display: inline-block;
-  width: auto;
-  color: #FFF;
-  border-bottom: 1px solid #FFF;
+  width: 100%;
+  border: 2px solid #000;
+  border-bottom: 2px solid #FFF;
+  border-right: 2px solid #FFF;
+}
+.header p {
+  background-color: rgb(181, 255, 0);
+  display: inline;
+}
+.header:hover{
+  box-shadow: 2px 2px 2px #FFF;
+  text-shadow: -2px -2px 2px #FFF;
+}
+.player-list:first-of-type{
+  opacity:1
 }
 .player-list {
   width: auto;
   padding: 10px;
-  border-bottom: 10px solid #cb9100;
+  border-radius: 5px;
   background: #FB1;
   color: #6b1cd9;
   overflow: hidden;
   font-family: Verdana;
-  text-shadow: -1px -1px;
+  font-weight: bold;
   opacity: 0.2;
 }
-.player-div {
-
+.player-list img {
+  border: 1px solid black;
+}
+.player-list {
+  margin-top: 15px;
+  border: 2px solid white;
+  color: white;
+  box-shadow: 2px 2px 2px;
 }
 .player-list ul {
   display: inline;
@@ -88,49 +122,74 @@ aside {
   list-style-type: none;
 
 }
+#player-list{
+}
+.avatar {
+  display: flex;
+  color: rgb(255, 255, 255);
+  background: -webkit-linear-gradient(#FFF, #00F);
+  background: -o-linear-gradient(#FFF, #00F);
+  background: linear-gradient(#00F, #FFF, #00F);
+  box-shadow: 2px 2px 2px #000;
+}
+.avatar:first-child {
+  border-radius: 20px 5px 20px;
+  border: 2px solid #FFF;
+  font-weight: bolder;
+  font-family: 'ITC Baskerville', cursive;
+  font-size: 32px;
+}
 .game-div{
   background: -webkit-linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
   background: -moz-linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
   background: -o-linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
   background: linear-gradient(#0632c1, #0632c1 10%, #FFF 50%, #6b1cd9);
-
+  box-shadow: 2px 2px 2px;
   margin: 0 15px;
-  border: 5px inset #000;
+  border: none;
   float: left;
 }
 .chat-block {
   width: 100%;
   overflow: hidden;
+  border: none;
 }
 #chat-text, #chat-input{
-  font-family: monospace;
+  font-family: 'Andale Mono', monospace;
   color: rgb(28, 255, 0);
   padding: 10px;
   width: 100%;
-  border: none;
+}
+#chat-input:focus{
+  border : 1px solid rgb(28, 255, 0);
 }
 #chat-text {
   background-color: transparent;
   height: 20vh;
+  overflow-y: scroll;
 }
 .chat-block, #chat-text, #chat-input {
   background: #000;
   display: block;
 }
 #chat-form {
-  border-top: 1px solid white;
+  border: none;
 }
 .chat-text:hover {
-  text-shadow: 5px 5px 5px white;
+  /* text-shadow: 5px 5px 5px white; */
 }
 #overlay {
   position: absolute;
-  opacity: 0;
-  background-color: #FFF;
-  border-radius: 15px;
-  width: 100px;
-  height: 100px;
+  opacity: 1;
+  border: 1px solid white;
+  background: rgba(255,255,255,0.1);
+  width: 500px;
+  height: auto;
   z-index: 2000;
+  font-family: 'ITC Baskerville', cursive;
+  font-size: 28px;
+  color: #FFF;
+
 }
 div.rule {
   height: 95vh;
@@ -149,13 +208,6 @@ div.rule {
   color: white;
   font-family: 'Oswald', sans-serif;
   border-top: 1px solid #FFF;
-}
-
-#play1 {
-  float: left;
-}
-#play2 {
-  float: right;
 }
 
 }
@@ -254,6 +306,7 @@ div.rule {
   font-family: monospace;
   color: rgb(28, 255, 0);
   height: 20vh;
+  overflow-y: scroll;
 }
 .chat-block {
   background: #000;
@@ -366,7 +419,7 @@ div.rule {
   }
   .player-list ul li {
     text-align: left;
-    list-style-type: none;
+    list-style-type: circle;
 
   }
   .game-div{
@@ -391,6 +444,7 @@ div.rule {
     font-family: monospace;
     color: rgb(28, 255, 0);
     height: 20vh;
+    overflow-y: scroll;
   }
   .chat-block {
     background: #000;

@@ -1,15 +1,13 @@
 include includes/header
+script(type='text/javascript' src='socket.io/socket.io.js')
 link(href="client/public/style.css")
 body
 .header-title
-  h1 Welcome to my Game#1
+  h1 Welcome to my Game - A Game Design BY-YC
 .container
   .header
     p Bienvenue #{username} ! Dernière connexion le #{date}
   .container
-    .game-div
-      include ../game-div.html
-    .player-div
-      include includes/player-list
+    include ../game-div.html
     .footer
       include includes/footer

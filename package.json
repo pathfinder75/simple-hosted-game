@@ -3,17 +3,21 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "author": "yvesc",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.3",
-    "npm": "^5.8.0",
-    "socket.io": "^2.1.0"
+    "connect": "2.7",
+    "express": "3.0",
+    "express-session": "^1.15.6",
+    "npm": "^5.10.0",
+    "socket.io": "^2.1.1"
   },
   "devDependencies": {
-    "nodemon": "^1.17.3"
+    "nodemon": "^1.17.4"
   },
   "description": ""
 }

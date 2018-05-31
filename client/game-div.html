@@ -1,6 +1,6 @@
 
-<div id="gameDiv">
-    <div id="overlay"></div>
+<div class="game-div">
+    <div id="overlay">3,2,1, Go!</div>
     <canvas id="ctx" width="500" height="500">
 
       <p>Veuillez mettre à jour votre navigateur.</p>
@@ -8,8 +8,9 @@
 
     <div class="chat-block">
 
-    <div id="chat-text" style="">
+    <div id="chat-text">
         <div>hello ! chat here_</div>
+
     </div>
       <form id="chat-form">
         <input type="text" id="chat-input" style="" placeholder="Entrer votre message ici.">
@@ -18,6 +19,10 @@
 
     </div>
 </div>
+<div class="player-div">
+  <div id="player-list"></div>
+
+</div>
 <script>
 var socket = io();
 // sign
@@ -25,12 +30,14 @@ var signDiv = document.getElementById('signDiv');
 var signDivUsername = document.getElementById('signDiv-username');
 var signDivSignIn = document.getElementById('signDiv-signIn');
 var signDivSignUp = document.getElementById('signDiv-signUp');
-var signDivPassword =   document.getElementById('signDiv-password');
+var signDivPassword = document.getElementById('signDiv-password');
 
 // Chat
-var chatText = document.getElementById('chat-text')
-var chatInput = document.getElementById('chat-input')
-var chatForm = document.getElementById('chat-form')
+var chatText = document.getElementById('chat-text');
+var chatInput = document.getElementById('chat-input');
+var chatForm = document.getElementById('chat-form');
+var playerList = document.getElementById('player-list');
+var playerAvatar = document.getElementById('overlay');
 
 // Game
 var ctx = document.getElementById('ctx').getContext("2d");
@@ -38,7 +45,7 @@ ctx.font = '1.5em ITC Baskerville';
 var gameDiv = document.getElementById('ctx');
 gameDiv.style.width = window.innerWidth;
 gameDiv.style.height = window.innerHeight;
-
+chatInput.focus();
 var Player = function(initPack){
     this.id = initPack.id;
     this.letter = initPack.letter;
@@ -52,7 +59,7 @@ var Player = function(initPack){
       // draw hp bar
       var hpWidth = 30 * self.hp / self.maxHp;
       ctx.fillRect(self.x - hpWidth/2, self.y - 40, hpWidth, 4);
-      // draw user avatar
+      // draw user character
       ctx.fillText(self.letter, self.x, self.y);
 
       // draw score
@@ -76,14 +83,51 @@ var Bullet = function (initPack) {
     return self;
 }
 Bullet.list = {};
-
+var getUniqueColor = function(){
+  var number = null;
+  var hexa = '#';
+  return (function(){
+    for (var i = 0; i < 3; i++){
+      number = Math.floor(Math.random() * (70 - 65) + 65);
+      hexa += String.fromCharCode(number);
+    }
+      return hexa;
+  })()
+}
 // init
+socket.on('join',function(data){
+  var p = document.createElement('DIV');
+  p.innerHTML = 'a new player has joined the party!:';
+  p.className = 'player-list';
+  p.style.backgroundColor = getUniqueColor();
+  var avatar = document.createElement('DIV');
+  var avatarImg = new Image();
+  avatarImg.src='https://robohash.org/' + data.username + '?size=100x100';
+  avatar.appendChild(avatarImg);
+  avatar.className = 'avatar';
+  var newContent = document.createTextNode(data.username + ' ID ');
+  var info = document.createElement('p');
+  info.innerHTML += '<br>' + 'name: ' + data.username;
+  info.innerHTML += '<br>' + 'date: ' + data.date;
+  info.innerHTML += '<br>' + 'score: ' + data.score;
+  info.style.fontFamily = "Verdana";
+  info.style.fontSize = "16px";
+  avatar.appendChild(info);
+
+  playerList.appendChild(avatar);
+  avatar.appendChild(newContent);
+  avatar.innerHTML += '<br>';
+  playerList.appendChild(p);
+});
 socket.on('init', function(data){
     for(var i = 0; i < data.player.length; i++) {
         new Player(data.player[i]);
     }
     for(var i = 0; i < data.bullet.length; i++) {
         new Bullet(data.bullet[i]);
+    }
+    for(var i = 0; i < data.player.length; i++){
+
     }
 });
 
@@ -105,6 +149,7 @@ socket.on('update', function(data){
             p.score = pack.score;
         }
     }
+
     for (var i = 0; i < data.bullet.length; i++) {
         var pack = data.bullet[i];
         var b = Bullet.list[pack.id];
@@ -133,17 +178,26 @@ setInterval(function() {
 
     ctx.clearRect(0,0,500,500);
 
+    function showPlayerList(){
+      // display userID
+      var newContent = 'Player list :';
+      Object.keys(Player.list).forEach(function(prop){
+        newContent += " " + JSON.stringify(Player.list[prop].id).slice(2,7) + ",";
+        ctx.fillText(newContent, 0, 20);
+      });
+    }
         for(var i in Player.list){
             Player.list[i].draw();
         }
+        // display bullet list
         for(var i in Bullet.list){
             Bullet.list[i].draw();
         }
 
     }, 40);
-
     socket.on('addToChat', function(data) {
-        chatText.innerHTML += '<img src="https://robohash.org/' + data.userID + '?size=100x100" />' + '<div>' + data.message + '</div>';
+      chatText.innerHTML += '<div>' + data.username + ': ' + data.message + '</div>';
+        // chatText.innerHTML += '<img src="https://robohash.org/' + data.userID + '?size=100x100" />' + '<div>' + data.message + '</div>';
     })
     socket.on('evalAnswer', function(data){
         console.log(data);
@@ -191,6 +245,12 @@ setInterval(function() {
         var angle = Math.atan2(y,x) / Math.PI * 180;
         socket.emit('keyPress', { inputId: 'mouseAngle', state: angle });
         }
+    // window.onbeforeunload = function(event){
+    //   var messageDeConfirmation = "Êtes vous sûr de vouloir quitter la partie ?";
+    //   event.preventDefault();
+    //   event.returnValue = messageDeConfirmation;
+    //     return messageDeConfirmation;
+    //   }
     window.addEventListener('resize', resizeGame, false);
     function resizeGame() {
       var gameDiv = document.getElementById('ctx');

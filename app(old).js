@@ -1,12 +1,11 @@
 
 var mongojs = require('mongojs');
 var db = mongojs('localhost:27017/myGame', ['account', 'progress']);
+
 const express = require('express');
 const path = require('path');
-var app = express();
 var session = require('express-session');
-var connect = require('connect');
-var sessionStore = new express.session.MemoryStore({ reapInterval: 60000 * 10 });
+var app = express();
 var cookie = require('cookie');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -18,7 +17,7 @@ app.use('/client/public',express.static(__dirname + '/client/public'));
 app.set('view engine','pug');
 app.set('views', __dirname + '/client/views');
 
-app.use(express.cookieParser('123456789SECRET'));
+app.use(cookieParser());
 
   // Session management
 app.use(session({
@@ -26,15 +25,13 @@ app.use(session({
     secret:'123456789SECRET',
     saveUninitialized : false,
     resave: false,
-    store: sessionStore
+
 }));
 // Allow parsing form data
-var username;
 app.use(bodyParser());
 function requireLogin(req, res, next) {
   // recupère l'identifiant de session
   if (req.session.username) {
-    username = req.session.username;
     // console.log(req.session);
     next();
   } else {
@@ -42,76 +39,72 @@ function requireLogin(req, res, next) {
   }
 }
 app.get('/', [requireLogin], function (req, res, next) {
-  var date = new Date(Date.UTC(2018,4,21,3,4,5));
-  res.cookie('username', req.session.username);
-  res.render('index', {"username": req.session.username, "date": date});
+
+  var date = new Date();
+  res.render('index', {"username": req.session.username, "date": date.toLocaleString()});
 });
 
 app.get("/login", function (req, res) {
 
   res.render("login", { "username": req.session.username, "error": null });
 });
-
 app.post("/login", function (req, res) {
 
   var options = { "username": req.body.username, "error": null };
   if (!req.body.username) {
     options.error = "User name is required";
+    console.log(options.error);
     res.render("login", options);
   } else if (req.body.username == req.session.username) {
-
     res.redirect('/');
   } else if (!req.body.username.match(/^\w{3,}$/)) {
     options.error = "User name must have at least 3 alphanumeric characters";
     res.render("login", options);
-  } else
-  if(!req.body.password){
-    options.error = "Password is required";
-    res.render("login", options);
   } else {
-    // check if username is taken
-    db.account.find({ username: req.body.username}, function(err, data) {
-        if (data.length > 0) {
-          var password = req.body.password;
+      // check if username is taken
+      db.account.find({ username: req.body.username}, function(err, data) {
+          if (data.length > 0) {
+            var password = req.body.password;
 
-            var isPasswordValid = function (psw, cb) {
-                db.account.find({username: req.body.username, password: psw}, function(err, data){
-                    if(data.length > 0){
-                        // true
-                        console.log('password match');
-                        cb(true);
-                    } else {
-                        // false
-                        console.log("password doesn't match");
-                        cb(false);
-                    }
-                });
-            };
-            isPasswordValid(password, function(rep){
-              if(rep){
-                var sessionID = req.sessionID;
-                req.session.username = req.body.username;
-                options.error = "sign In successfull";
-                res.redirect("/");
+              var isPasswordValid = function (pass, cb) {
+                  db.account.find({password: pass}, function(err, data){
+                      if(data.length > 0){
+                          // true
+                          console.log('password match');
+                          cb(true);
+                      } else {
+                          // false
+                          console.log("password doesn't match");
+                          cb(false);
+                      }
+                  });
+              };
+              isPasswordValid(password, function(rep){
 
-              } else {
-                options.error = "User name is already taken. Wrong login or password";
-                res.render("login", options);
+                if(rep){
+                  console.log('true');
+                  req.session.username = req.body.username;
+                  options.error = "sign In successfull";
+                  res.redirect("/");
 
-              }
-            });
+                } else {
+                  options.error = "User name is already taken. Wrong login or password";
+                  res.render("login", options);
 
-        } else {
-            // false
-            req.session.username = req.body.username;
-            db.account.insert({username: req.session.username, password: req.body.password})
-            options.error = "sign up successfull";
-            res.redirect("/");
-        }
-    });
-  }
+                }
+              });
+
+          } else {
+              // false
+              req.session.username = req.body.username;
+              db.account.insert({username: req.session.username, password: req.body.password})
+              options.error = "sign up successfull";
+              res.redirect("/");
+          }
+      });
+    }
 });
-var connections = {};
+
 
 serv.listen(2000);
 console.log('Server started.');
@@ -355,78 +348,35 @@ var DEBUG = true;
 var getUniqueLetter = function() {
     return String.fromCharCode(Math.floor(Math.random() * (90 - 65) + 65));
 }
-var connections = {};
+
 var io = require('socket.io').listen(serv);
 
 io.sockets.on('connection', function(socket){
-  // Read cookies
-  // console.log(JSON.stringify(socket.handshake.headers.cookie));
-  var cookies = cookie.parse(socket.handshake.headers.cookie);
-  var sessionID = connect.utils.parseSignedCookie(cookies['connect.sid'], '123456789SECRET');
-  socket.handshake.sessionID = sessionID;
-  // var sessionID = s.splice(2); // Store session ID from handshake
-  // this is required if we want to access this data when user leaves, as handshake is
-  // not available in "disconnect" event.
-  // socket.handshake.username = username; // Same here, to allow event "bye" with username
-  var username = "";
-  sessionStore.get(sessionID, function (err, session) {
-    if(!err && session){
-      username = session.username;
-      socket.handshake.username = session.username;
-    } else
-    console.log(err);
-  });
-  console.log(socket.handshake);
-  var username = connect.utils.parseSignedCookie(cookies['username'], '123456789SECRET');
-  console.log(username);
-  var date = new Date();
   socket.id = Math.random();
   SOCKET_LIST[socket.id] = socket;
   Player.onConnect(socket);
-  for (var i in SOCKET_LIST){
-      SOCKET_LIST[i].emit('join', {'username': username, date: date});
-  }
-  // socket.emit('join', {"username" : username, "date" : Date.now()});
-
-  // if (connections[sessionID] == undefined) {
-  //   connections[sessionID] = { "length": 0 };
-  //   connections[sessionID][socket.id] = socket;
-  // }
-  // connections[sessionID][socket.id] = socket;
-  // // First connection
-  // connections[sessionID].length++;
-  // Add connection to pool
-  // {sessionID : {socket.id : { socket }} }
 
 
 var DEBUG = true;
 
-  //     var playerID = ("" + socket.id).slice(2,7);
-  //     var score = db.progress.find({userID: playerID});
-  //     socket.emit('addToPlayerList', {userID: playerID, score: score});
+  // socket.emit('signInResponse', { success: true });
+  socket.on('happy', function(data){
+      var playerID = ("" + socket.id).slice(2,7);
+      var score = db.progress.find({userID: playerID});
+      socket.emit('addToPlayerList', {userID: playerID, score: score});
+  });
 
   socket.on('sendMsgToServer', function(data){
       var playerID = ("" + socket.id).slice(2,7);
-      var username = socket.handshake.username;
       for (var i in SOCKET_LIST){
-          SOCKET_LIST[i].emit('addToChat', {'username': username, message: data});
+          SOCKET_LIST[i].emit('addToChat', {userID: playerID, message: data});
       }
   });
 
     socket.on('disconnect', function(){
-        // Is this socket associated to user session ?
-        // var userConnections = connections[sessionID];
-        // if (userConnections.length && userConnections[socket.id]) {
-        //   // Forget this socket
-        //   userConnections.length --;
-        //   delete userConnections[socket.id];
-        // }
-        // if (userConnections.length == 0) {
-          // No more active sockets for this user: say bye
-          // socket.emit('bye', user, Date.now());
-          delete SOCKET_LIST[socket.id];
-          Player.onDisconnect(socket);
-        // }
+
+        delete SOCKET_LIST[socket.id];
+        Player.onDisconnect(socket);
 
     });
 
